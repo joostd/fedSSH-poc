@@ -1,0 +1,26 @@
+---
+# tasks file for ssh
+
+- name: generate missing ED25519 key
+  command: ssh-keygen -A
+  args:
+    creates: /etc/ssh/ssh_host_ed25519_key
+
+- name: copy authorized_keys script
+  copy: src=authorized_keys dest=/root/authorized_keys mode=0755
+
+- name: add AuthorizedKeysCommand to sshd config
+  lineinfile: dest=/etc/ssh/sshd_config line="AuthorizedKeysCommand /root/authorized_keys"
+  notify:
+  - restart ssh
+
+- name: add AuthorizedKeysCommandUser to sshd config
+  lineinfile: dest=/etc/ssh/sshd_config line="AuthorizedKeysCommandUser root"
+  notify:
+  - restart ssh
+
+- name: disable password authentication
+  lineinfile: dest=/etc/ssh/sshd_config regexp="^PasswordAuthentication.*yes" line="PasswordAuthentication no"
+  notify:
+  - restart ssh
+

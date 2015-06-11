@@ -1,0 +1,14 @@
+---
+# Ansible playbook
+
+- name: Configuration for web servers
+  hosts: webservers
+  sudo: True
+  roles:
+  - web
+
+- name: Configuration for ssh servers
+  hosts: sshservers
+  sudo: True
+  roles:
+  - ssh

@@ -1,0 +1,61 @@
+---
+# tasks file for web
+
+- name: install apache and modules
+  apt: name={{ item }} update_cache=yes state=latest
+  with_items:
+    - apache2
+    - libapache2-mod-shib2
+    - libapache2-mod-php5
+
+- name: enabled mod_ssl
+  apache2_module: name=ssl state=present
+  notify:
+  - restart apache2
+
+- name: create virtual host file
+  template: src=vhost.conf dest=/etc/apache2/sites-available/{{ domain }}.conf
+  notify:
+  - restart apache2
+
+- name: a2ensite {{ domain }}
+  command: a2ensite {{ domain }}
+  args:
+    creates: /etc/apache2/sites-enabled/{{ domain }}.conf
+  notify:
+  - restart apache2
+
+- name: create Shibboleth config file
+  template: src=shibboleth2.xml dest=/etc/shibboleth/shibboleth2.xml
+  notify:
+  - restart shibd
+
+- name: create Shibboleth attribute map
+  template: src=attribute-map.xml dest=/etc/shibboleth/attribute-map.xml
+  notify:
+  - restart shibd
+
+- name: install openidp SAML 2.0 metadata
+  copy: src=openidp-metadata.xml dest=/etc/shibboleth/openidp-metadata.xml
+  notify:
+  - restart shibd
+
+
+- name: Install MariaDB server package
+  apt: name=mariadb-server state=present
+- name: Start Mysql Service
+  service: name=mysql state=started enabled=true
+- name: Install python Mysql package #required for mysql_db tasks
+  apt: name=python-mysqldb state=present
+- name: Create a new database
+  mysql_db: name=credentials state=present collation=utf8_general_ci
+- name: Create a database user
+  mysql_user: name=admin password=admin priv=*.*:ALL host=localhost state=present
+- name: Copy sample data
+  copy: src=dump.sql dest=/tmp/dump.sql
+- name: Insert sample data
+  shell: cat /tmp/dump.sql | mysql -u admin -padmin credentials
+- name: Install MySQL extension for PHP
+  apt: name=php5-mysql state=present
+  notify:
+  - restart apache2

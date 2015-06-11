@@ -1,0 +1,22 @@
+#!/bin/sh
+
+username=$1;
+if [ -z "$username" ]
+then
+	exit
+fi
+
+if [ $username = "vagrant" ]
+then
+	cat /home/vagrant/.ssh/authorized_keys 
+	exit
+fi
+
+KEY=`curl -sk https://192.168.100.10/api/authorized_keys.php?username=$username`
+
+if [ -z "$KEY" ]
+then
+	exit
+fi
+
+echo "no-port-forwarding,no-X11-forwarding,no-agent-forwarding $KEY"

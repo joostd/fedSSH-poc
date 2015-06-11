@@ -1,0 +1,33 @@
+#!/usr/bin/env php
+<?php
+
+function getUserData($db, $username) {
+	$stmt = $db->prepare("SELECT * FROM pubkey WHERE username=?");
+	$stmt->execute(array($username));
+	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	return $rows;
+}
+
+###
+
+$username = $argv[1];
+
+require("config.php");
+$host = $config['db']['host'];
+$dbname = $config['db']['dbname'];
+$user = $config['db']['username'];
+$pass = $config['db']['password'];
+$db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+
+try {
+	$data = getUserData($db, $username);
+	#if( count($data) > 1 ) {
+	foreach( $data as $user ) {
+		#$user = $data[0];
+		if( $user['enabled'] == 1 ) {
+			echo( $user['pubkey'] );
+		}
+	}
+} catch(PDOException $ex) {
+	echo('oops');
+}

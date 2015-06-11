@@ -1,0 +1,44 @@
+<SPConfig xmlns="urn:mace:shibboleth:2.0:native:sp:config"
+    xmlns:conf="urn:mace:shibboleth:2.0:native:sp:config"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"    
+    xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+    clockSkew="180">
+
+    <ApplicationDefaults entityID="https://{{ domain }}/shibboleth"
+                         REMOTE_USER="uid eppn persistent-id targeted-id">
+
+        <Sessions lifetime="28800" timeout="3600" relayState="ss:mem"
+                  checkAddress="false" handlerSSL="false" cookieProps="http">
+            <SSO entityID="https://openidp.feide.no">
+              SAML2 SAML1
+            </SSO>
+            <Logout>SAML2 Local</Logout>
+            
+            <Handler type="MetadataGenerator" Location="/Metadata" signing="false"/>
+            <Handler type="Status" Location="/Status" acl="127.0.0.1 ::1"/>
+            <Handler type="Session" Location="/Session" showAttributeValues="false"/>
+            <Handler type="DiscoveryFeed" Location="/DiscoFeed"/>
+        </Sessions>
+
+        <Errors supportContact="root@{{ domain }}"
+            helpLocation="/about.html"
+            styleSheet="/shibboleth-sp/main.css"/>
+        
+        <MetadataProvider type="XML" file="openidp-metadata.xml"/>
+
+        <!-- Map to extract attributes from SAML assertions. -->
+        <AttributeExtractor type="XML" validate="true" reloadChanges="false" path="attribute-map.xml"/>
+        <!-- Use a SAML query if no attributes are supplied during SSO. -->
+        <AttributeResolver type="Query" subjectMatch="true"/>
+        <!-- Default filtering policy for recognized attributes, lets other data pass. -->
+        <AttributeFilter type="XML" validate="true" path="attribute-policy.xml"/>
+        <!-- Simple file-based resolver for using a single keypair. -->
+        <CredentialResolver type="File" key="sp-key.pem" certificate="sp-cert.pem"/>
+
+    </ApplicationDefaults>
+    
+    <SecurityPolicyProvider type="XML" validate="true" path="security-policy.xml"/>
+    <ProtocolProvider type="XML" validate="true" reloadChanges="false" path="protocols.xml"/>
+
+</SPConfig>

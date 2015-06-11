@@ -1,0 +1,11 @@
+---
+# handlers file for web
+
+- name: restart apache2
+  service: name=apache2 state=restarted
+
+- name: restart shibd
+  service: name=shibd state=restarted
+
+- name: restart mysql
+  service: name=mysql state=restarted
