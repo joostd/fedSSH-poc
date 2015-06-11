@@ -70,8 +70,13 @@ try {
 		$user = $data[0];
 		$email = $user['email'];
 		#echo "$email";
-		echo "<a href='?delete'>delete SSH credential</a>";
-	}
+        foreach( $data as $user ) {
+            #if( $user['enabled'] == 1 ) {
+            echo( substr($user['pubkey'], 0, 32) . "...  " );
+            echo "(<a href='?delete'>delete</a>)";
+            #}
+        }
+    }
 } catch(PDOException $ex) {
 	echo('oops');
 }

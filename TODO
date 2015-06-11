@@ -1,0 +1,6 @@
+expire accounts
+use pam_mkhomedir for autoprovisioning
+support multiple pubkeys
+store pubkeys in LDAP?
+send expiry email
+make IP addresses dynamic
