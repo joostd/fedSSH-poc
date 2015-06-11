@@ -1,7 +1,9 @@
 <?php
 
 function getUserData($db, $username) {
-	$stmt = $db->prepare("SELECT * FROM pubkey WHERE enabled=1 AND username=?");
+	#retrieve ALL keys because for now, we map all users to the ubuntu account
+	#$stmt = $db->prepare("SELECT * FROM pubkey WHERE enabled=1 AND username=?");
+	$stmt = $db->prepare("SELECT * FROM pubkey WHERE enabled=1");
 	$stmt->execute(array($username));
 	$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	return $rows;
