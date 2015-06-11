@@ -12,15 +12,15 @@
 - name: add AuthorizedKeysCommand to sshd config
   lineinfile: dest=/etc/ssh/sshd_config line="AuthorizedKeysCommand /root/authorized_keys"
   notify:
-  - restart ssh
+  - restart sshd
 
 - name: add AuthorizedKeysCommandUser to sshd config
   lineinfile: dest=/etc/ssh/sshd_config line="AuthorizedKeysCommandUser root"
   notify:
-  - restart ssh
+  - restart sshd
 
 - name: disable password authentication
   lineinfile: dest=/etc/ssh/sshd_config regexp="^PasswordAuthentication.*yes" line="PasswordAuthentication no"
   notify:
-  - restart ssh
+  - restart sshd
 
