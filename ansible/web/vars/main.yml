@@ -1,3 +1,7 @@
 ---
 # vars file for web
 domain: example.org
+dbhost: localhost
+dbname: credentials
+dbuser: admin
+dbpass: secret

@@ -11,7 +11,7 @@ function getUserData($db, $username) {
 
 ###
 
-require("../config.php");
+require("../../config.php");
 
 $username = $_GET['username'];
 if (!preg_match("/^[a-zA-Z0-9._-]+$/", $username)) {

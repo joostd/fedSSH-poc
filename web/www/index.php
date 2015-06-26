@@ -54,7 +54,7 @@ if (!isset($_SESSION['username']) ) {
 $username = $_SESSION['username'];
 
 
-require("config.php");
+require("../config.php");
 $host = $config['db']['host'];
 $dbname = $config['db']['dbname'];
 $user = $config['db']['username'];

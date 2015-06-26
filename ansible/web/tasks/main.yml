@@ -41,21 +41,30 @@
   notify:
   - restart shibd
 
+- name: create webapp config file
+  template: src=config.php.j2 dest=/vagrant_data/www/config.php
 
 - name: Install MariaDB server package
   apt: name=mariadb-server state=present
+
 - name: Start Mysql Service
   service: name=mysql state=started enabled=true
+
 - name: Install python Mysql package #required for mysql_db tasks
   apt: name=python-mysqldb state=present
+
 - name: Create a new database
-  mysql_db: name=credentials state=present collation=utf8_general_ci
+  mysql_db: name={{dbname}} state=present collation=utf8_general_ci
+
 - name: Create a database user
-  mysql_user: name=admin password=admin priv=*.*:ALL host=localhost state=present
+  mysql_user: name={{dbuser}} password={{dbpass}} priv=*.*:ALL host=localhost state=present
+
 - name: Copy sample data
   copy: src=dump.sql dest=/tmp/dump.sql
+
 - name: Insert sample data
-  shell: cat /tmp/dump.sql | mysql -u admin -padmin credentials
+  shell: cat /tmp/dump.sql | mysql -u {{dbuser}} -p{{dbpass}} {{dbname}}
+
 - name: Install MySQL extension for PHP
   apt: name=php5-mysql state=present
   notify:

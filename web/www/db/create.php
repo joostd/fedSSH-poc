@@ -51,7 +51,7 @@ if(isset($_POST["submit"])) {
     }
 
 
-    require("../config.php");
+    require("../../config.php");
     $host = $config['db']['host'];
     $dbname = $config['db']['dbname'];
     $user = $config['db']['username'];
