@@ -9,22 +9,31 @@ Install [ansible](http://docs.ansible.com/intro_installation.html#getting-ansibl
 
 To launch the VMs and install all software, simply type
 
-  vagrant up
+	vagrant up
   
 The web server authenticates users using SAML 2.0 against the Feide [OpenIdP](https://openidp.feide.no). Register an account there to be able to log in.
 
 The SSH server authenticates users using public keys. The public key used for a particular user is retrieved from an API on the web server.
 
+## Configure
+
+When using the local vagrant VM, you no not need to configure anything - all defaults will be used. Otherwise, make sure you change those defaults, in particular
+- the database password
+- the domain name
+
+Edit the file [ansible/web/vars/main.yml](ansible/web/vars/main.yml) to set appropriate values.
+
+
 ## Usage
 
 The default names and IP addresses for the servers need to be either changed or you will need to edit your `/etc/hosts` file to include
 
-  192.168.100.10  example.org
-  192.168.100.11  ssh.example.org
+	192.168.100.10  example.org
+	192.168.100.11  ssh.example.org
 
 Point your web browser to https://example.org/ and log in using your OpenIdP account. Upload an SSH public key to associate with your account.
 
 After uploading your key, you can access the SSH server using
 
-  ssh 192.168.100.11 -l ubuntu -i
+	ssh 192.168.100.11 -l ubuntu -i
 
