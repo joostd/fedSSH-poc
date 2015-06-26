@@ -4,6 +4,7 @@
 - name: install apache and modules
   apt: name={{ item }} update_cache=yes state=latest
   with_items:
+    - ntp
     - apache2
     - libapache2-mod-shib2
     - libapache2-mod-php5
