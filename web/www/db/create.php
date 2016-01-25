@@ -1,3 +1,12 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="/shibboleth-sp/main.css" />
+  <title>Upload SSH public key</title>
+ </head>
+ <body>
+  <h1>Upload SSH public key</h1>
 <?php
 
 session_start();
@@ -47,7 +56,7 @@ if(isset($_POST["submit"])) {
     if ($uploadOk == 0) {
         echo "Sorry, your file was not uploaded.";
     } else {
-        echo "<code>$pubkey</code>";
+        #echo "<code>$pubkey</code>";
     }
 
 
@@ -64,21 +73,15 @@ if(isset($_POST["submit"])) {
     echo "<li><b>pubkey</b>:<code>$pubkey</code></li>";
     echo "<p><a href='$return'>continue</a></p>";
 
-
 } else {
     ?>
-    <!DOCTYPE html>
-    <html>
-    <body>
-
     <form method="post" enctype="multipart/form-data">
         Select SSH public key file to upload:
         <input type="file" name="fileToUpload" id="fileToUpload">
         <input type="submit" value="Upload SSH pubkey" name="submit">
     </form>
-
-    </body>
-    </html>
 <?php
 }
 ?>
+    </body>
+    </html>
