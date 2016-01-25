@@ -5,7 +5,7 @@ This tutorial walks you through the procedure for setting up the proof of concep
 ## Install software
 
 The proof of concept uses two Virtual Machines: one running an SSH server, and one  running a web application for registering application credentials (SSH pubkeys).
-In this tutorial we will assume you are running VMs on a local machine using VirtualBox, but the VMs could also live at any cloud provider.
+In this tutorial we will assume you are running VMs on a local machine using [VirtualBox](https://www.virtualbox.org), but the VMs could also live at any cloud provider.
 
 - [Download](https://www.virtualbox.org/wiki/Downloads) and install Virtual Box.
 
@@ -17,7 +17,7 @@ To provision the virtual machines, we use [Ansible](http://www.ansible.com).
 
 - [Download](http://docs.ansible.com/ansible/intro_installation.html) and install Ansible.
 
-To obtain the code from Github, Git is used.
+To obtain the code from Github, [Git](https://git-scm.com) is used.
 
 - [Download](https://git-scm.com/downloads) and install Git.
 
