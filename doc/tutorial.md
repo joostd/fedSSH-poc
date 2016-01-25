@@ -17,8 +17,12 @@ To provision the virtual machines, we use [Ansible](http://www.ansible.com).
 
 - [Download](http://docs.ansible.com/ansible/intro_installation.html) and install Ansible.
 
+To obtain the code from Github, Git is used.
 
-# Launch VMs
+- [Download](https://git-scm.com/downloads) and install Git.
+
+
+## Launch VMs
 
 Check out the proof-of-concept code from github using git:
 
@@ -41,12 +45,16 @@ Create and provision the VMs using Vagrant and Ansible:
 	==> web: Running provisioner: ansible...
 	...
 
-# XXX
+## Fix your hostnames
 
-Add to your `hosts` file:
+The Vagrant file has set up your VMs with fixed IP addresses: `192.168.100.10` for the web server, and `192.168.100.11` for the SSH server.
+We like to refer to them using the domain names `example.org` and `ssh.example.org`, respectively.
+It is convenient to add these name to your `hosts` file:
 
-	sudo sh -c "echo '192.168.100.10 example.org' >> /etc/hosts"
-	sudo sh -c "echo '192.168.100.11 ssh.example.org' >> /etc/hosts"
+	[user@host:~]$ sudo sh -c "echo '192.168.100.10 example.org' >> /etc/hosts"
+	[user@host:~]$ sudo sh -c "echo '192.168.100.11 ssh.example.org' >> /etc/hosts"
+
+## Run the demo
 
 The SSH server will have a user named `ubuntu`, but this user cannot authenticate without an SSH key:
 
@@ -62,7 +70,7 @@ So first generate SSH keys:
 	Your identification has been saved in ./id_rsa.
 	Your public key has been saved in ./id_rsa.pub.
 	The key fingerprint is:
-	SHA256:NDcy4wTSnM/Sjs6lgfLHsUwmyTPltPHgK+zSgt5NIIY jodi@zeven.175.surf.nl
+	SHA256:NDcy4wTSnM/Sjs6lgfLHsUwmyTPltPHgK+zSgt5NIIY user@host
 	The key's randomart image is:
 	+---[RSA 2048]----+
 	|    .o..         |
