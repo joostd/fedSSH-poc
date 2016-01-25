@@ -1,2 +1,3 @@
 .vagrant
 .idea
+web/config.php
