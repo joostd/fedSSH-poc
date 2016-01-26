@@ -35,5 +35,8 @@ Point your web browser to https://example.org/ and log in using your OpenIdP acc
 
 After uploading your key, you can access the SSH server using
 
-	ssh 192.168.100.11 -l ubuntu -i
+	ssh ssh.example.org -l ubuntu -i <path to your public key file>
 
+## More info
+
+For a more elaborate tour of this PoC, see the [tutorial](doc/tutorial.md)
