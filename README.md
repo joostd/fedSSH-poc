@@ -37,3 +37,6 @@ After uploading your key, you can access the SSH server using
 
 	ssh 192.168.100.11 -l ubuntu -i
 
+## More info
+
+For a more elaborate tour of this PoC, see the [tutorial](doc/tutorial.md)
