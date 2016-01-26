@@ -19,7 +19,7 @@ $base = '/var/webdav';
 $userdir = "$base/$username";
 
 ### auto enable SSH credentials (and timestamp)
-require("../config.php");
+require("../../config.php");
 $host = $config['db']['host'];
 $dbname = $config['db']['dbname'];
 $user = $config['db']['username'];
