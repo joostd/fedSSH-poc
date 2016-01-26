@@ -42,7 +42,7 @@
   - restart shibd
 
 - name: create webapp config file
-  template: src=config.php.j2 dest=/vagrant_data/www/config.php
+  template: src=config.php.j2 dest=/vagrant_data/config.php
 
 - name: Install MariaDB server package
   apt: name=mariadb-server state=present
