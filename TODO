@@ -4,3 +4,5 @@ support multiple pubkeys
 store pubkeys in LDAP?
 send expiry email
 make IP addresses dynamic
+implement authZ using teams
+use log-API to detect account activity (to prevent unnecessary expiration)
