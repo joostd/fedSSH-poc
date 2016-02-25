@@ -14,16 +14,15 @@
     creates: /etc/ssh/ssh_host_ed25519_key
 
 - name: copy authorized_keys script
-  template: src=authorized_keys.j2 dest=/root/authorized_keys mode=0755 owner=root group=root
+  template: src=authorized_keys.j2 dest=/usr/local/bin/authorized_keys mode=0755 owner=root
 
 - name: add AuthorizedKeysCommand to sshd config
-  lineinfile: dest=/etc/ssh/sshd_config line="AuthorizedKeysCommand /root/authorized_keys"
+  lineinfile: dest=/etc/ssh/sshd_config line="AuthorizedKeysCommand /usr/local/bin/authorized_keys"
   notify:
   - restart sshd
 
-# TODO user nobody!
 - name: add AuthorizedKeysCommandUser to sshd config
-  lineinfile: dest=/etc/ssh/sshd_config line="AuthorizedKeysCommandUser root"
+  lineinfile: dest=/etc/ssh/sshd_config line="AuthorizedKeysCommandUser nobody"
   notify:
   - restart sshd
 
