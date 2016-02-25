@@ -35,8 +35,24 @@ Point your web browser to https://example.org/ and log in using your OpenIdP acc
 
 After uploading your key, you can access the SSH server using
 
-	ssh ssh.example.org -l ubuntu -i <path to your SSH key file>
+	ssh ssh.example.org -l ubuntu -i <path to your public key file>
 
 ## More info
 
 For a more elaborate tour of this PoC, see the [tutorial](doc/tutorial.md)
+
+## Troubleshooting
+
+When a `vagrant up` reports the following error message:
+
+	The box 'ubuntu/trusty64' could not be found.
+
+you may not have the required Ubuntu box image installed.
+Try installing the box with:
+
+	vagrant box add ubuntu/trusty64
+
+If that doesn't work, try
+
+	vagrant box add ubuntu/trusty64 https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
+
