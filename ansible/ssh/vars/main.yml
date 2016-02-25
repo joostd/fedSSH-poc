@@ -1,2 +1,8 @@
 ---
 # vars file for ssh
+
+domain: example.org
+SUFFIX: dc=example,dc=org
+secret: secret
+
+# TODO: global vars for domain and SUFFIX

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+base="{{ SUFFIX }}"
+username=$1;
+if [ -z "$username" ]
+then
+	exit
+fi
+
+if [ $username = "vagrant" ]
+then
+	cat /home/vagrant/.ssh/authorized_keys 
+	exit
+fi
+
+search="(uid=$username)"
+KEY=`ldapsearch -LLL -H ldap://192.168.100.12/ -b $base -x $search sshPublicKey | grep -v ^dn:`
+
+if [ -z "$KEY" ]
+then
+	exit
+fi
+
+echo -e "no-port-forwarding,no-X11-forwarding,no-agent-forwarding "
+echo "$KEY" | perl -p00e 's/\r?\n //g' | cut -d' ' -f2 | base64 -d

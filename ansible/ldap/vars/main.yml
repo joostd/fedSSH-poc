@@ -1,0 +1,7 @@
+---
+# vars file for ldap
+domain: example.org
+secret: secret
+ADMIN: cn=admin,dc=example,dc=org
+SUFFIX: dc=example,dc=org
+BACKEND: hdb

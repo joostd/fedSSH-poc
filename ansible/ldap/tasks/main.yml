@@ -1,0 +1,45 @@
+---
+# tasks file for ldap
+
+# TODO: generic task for all hosts
+- name: copy hosts file
+  copy: src=hosts dest=/etc/hosts owner=root mode=0644
+
+- name: set hostnmae
+  hostname: name=ldap.{{domain}}
+
+- name: install openldap and tools
+  apt: name={{ item }} update_cache=yes state=latest
+  with_items:
+    - slapd
+    - ldap-utils
+
+- name: create openldap config file
+  template: src=slapd.conf dest=/etc/ldap/slapd.conf group=openldap owner=openldap mode="660"
+  notify:
+  - restart slapd
+
+- name: revert to file configuration
+  lineinfile: dest=/etc/default/slapd regexp="^SLAPD_CONF=$" line="SLAPD_CONF=/etc/ldap/slapd.conf"
+  notify:
+  - restart slapd
+
+- name: copy openssh-lpk schema
+  copy: src=openssh-lpk_openldap.schema dest=/etc/ldap/schema/openssh-lpk_openldap.schema mode=0644
+
+- name: include openssh-lpk schema
+  lineinfile: dest=/etc/ldap/slapd.conf line="include /etc/ldap/schema/openssh-lpk_openldap.schema"
+  notify:
+  - restart slapd
+
+- name: Copy sample data
+  template: src=ubuntu.ldif.j2 dest=/tmp/ubuntu.ldif owner=root group=root
+
+- name: Insert sample data
+  #shell: ldapsearch -LLL -H 'ldap://localhost/' -b {{ SUFFIX }} -x '(uid=john)' dn
+  shell: "slapcat -H 'ldap:///???(uid=john)'"
+  register: result
+- shell: ldapadd -x -D {{ ADMIN }} -w{{ secret }} -f /tmp/ubuntu.ldif
+  when: result.stdout == ""
+
+# TODO: index on uid eq,pres,sub

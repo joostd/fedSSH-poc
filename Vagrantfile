@@ -4,6 +4,7 @@
 hosts = {
   "web" => "192.168.100.10",
   "ssh" => "192.168.100.11",
+  "ldap" => "192.168.100.12",
 }
 
 Vagrant.configure(2) do |config|
@@ -28,7 +29,9 @@ Vagrant.configure(2) do |config|
     ansible.groups = {
       "webservers" => ["web"],
       "sshservers" => ["ssh"],
-      "all_groups:children" => ["webservers", "sshservers"]
+      "ldapservers" => ["ldap"],
+      "all_groups:children" => ["webservers", "sshservers", "ldapservers"],
+      "all_groups:vars" => { "domain" => "example.org"}
     }
   end
 

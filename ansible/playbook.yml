@@ -12,3 +12,9 @@
   sudo: True
   roles:
   - ssh
+
+- name: Configuration for ldap servers
+  hosts: ldapservers
+  sudo: True
+  roles:
+  - ldap

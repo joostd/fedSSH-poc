@@ -1,19 +1,27 @@
 ---
 # tasks file for ssh
 
+- name: install openldap and tools
+  apt: name={{ item }} update_cache=yes state=latest
+  with_items:
+    - ldap-utils
+    - libpam-ldap
+    #- nscd
+
 - name: generate missing ED25519 key
   command: ssh-keygen -A
   args:
     creates: /etc/ssh/ssh_host_ed25519_key
 
 - name: copy authorized_keys script
-  copy: src=authorized_keys dest=/root/authorized_keys mode=0755
+  template: src=authorized_keys.j2 dest=/root/authorized_keys mode=0755 owner=root group=root
 
 - name: add AuthorizedKeysCommand to sshd config
   lineinfile: dest=/etc/ssh/sshd_config line="AuthorizedKeysCommand /root/authorized_keys"
   notify:
   - restart sshd
 
+# TODO user nobody!
 - name: add AuthorizedKeysCommandUser to sshd config
   lineinfile: dest=/etc/ssh/sshd_config line="AuthorizedKeysCommandUser root"
   notify:
@@ -24,3 +32,19 @@
   notify:
   - restart sshd
 
+- name: enable ldap in Name Service Switch configuration
+  copy: src=nsswitch.conf dest=/etc/nsswitch.conf mode=0644
+
+- name: copy ldap client configuration file
+  template: src=ldap.conf.j2 dest=/etc/ldap.conf mode=0644 owner=root group-root
+
+- name: enable pam mkhomedir session for sshd
+  lineinfile: dest=/etc/pam.d/sshd insertafter="@include common-session"     line="session     optional      pam_mkhomedir.so"
+- name: enable pam ldap auth for sshd
+  lineinfile: dest=/etc/pam.d/sshd insertafter="@include common-auth"     line="auth    sufficient      pam_ldap.so use_first_pass"
+- name: enable pam ldap account for sshd
+  lineinfile: dest=/etc/pam.d/sshd insertafter="@include common-account"  line="account     [default=bad success=ok user_unknown=ignore] pam_ldap.so"
+- name: enable pam ldap session for sshd
+  lineinfile: dest=/etc/pam.d/sshd insertafter="@include common-session"  line="session     optional      pam_ldap.so"
+- name: enable pam ldap password for sshd
+  lineinfile: dest=/etc/pam.d/sshd insertafter="@include common-password" line="password    sufficient    pam_ldap.so"

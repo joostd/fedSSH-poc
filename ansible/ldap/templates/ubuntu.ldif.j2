@@ -1,0 +1,33 @@
+dn: ou=People,{{ SUFFIX }}
+objectClass: organizationalUnit
+ou: People
+
+dn: ou=Groups,{{ SUFFIX }}
+objectClass: organizationalUnit
+ou: Groups
+
+dn: cn=miners,ou=Groups,{{ SUFFIX }}
+objectClass: posixGroup
+cn: ldapssh
+gidNumber: 5000
+
+dn: uid=john,ou=People,{{ SUFFIX }}
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+objectClass: ldapPublicKey
+uid: john
+sn: Doe
+givenName: John
+cn: John Doe
+displayName: John Doe
+uidNumber: 10000
+gidNumber: 5000
+userPassword: johnldap
+gecos: John Doe
+loginShell: /bin/bash
+homeDirectory: /home/john
+sshPublicKey:: c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFBZ1FDK1VPMHV4VHR
+ ZYmh1cmJiQVdiSElqaUF0MTB0RFdzL1o3bEpHb0xodFlrSTExaTlLUmVHalNmdnJBbSt6RGxncFl3
+ Q3p0d1FmOWQ2Q28yK0pqM1Z3UHNvMmJwZUptOTJTeW9oSG5wWTY1dW4xRHRhV1pLSkJ6cHNZZXoyN
+ nRENHFCREZqM1ZiTUdvczdQYTk0T2VzNXNRZzhaenZod3ZZT09RVkQ5ZTd2Sml3PT0K
