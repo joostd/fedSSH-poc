@@ -9,6 +9,7 @@
   <h1>Upload SSH public key</h1>
 <?php
 
+
 session_start();
 if( !isset($_SESSION['username']) ) {
 	echo "Please log in first";
@@ -26,11 +27,14 @@ if( isset($_GET['return']) ) {
 	$return = $_GET['return'];
 }
 
+$target_file = "";
+if ( isset($_FILES["fileToUpload"]) ) {
+    $target_file = basename($_FILES["fileToUpload"]["name"]);
+}
 
-
-$target_file = basename($_FILES["fileToUpload"]["name"]);
 //echo "[$target_file]";
 $uploadOk = 1;
+$ipaddressesOk = 1;
 $fileType = pathinfo($target_file,PATHINFO_EXTENSION);
 //echo "[$fileType]";
 
@@ -59,6 +63,24 @@ if(isset($_POST["submit"])) {
         #echo "<code>$pubkey</code>";
     }
 
+    if (! isset($_POST["ipaddresses"]) ) {
+        echo "Sorry, you did not specify any ip addresses.";
+	$addresssesOk = 0;
+    } 
+    $ipaddresses = $_POST["ipaddresses"];
+    foreach (explode(",", $ipaddresses) as $ip) {
+	if (!filter_var($ip, FILTER_VALIDATE_IP)) {
+            echo "Sorry, the ip '$ip' is not a valid ip address.";
+	    $addresssesOk = 0;
+	
+        }
+    }
+
+    if ($ipaddressesOk == 0) {
+        echo "Sorry, no valid ip-addresses specified.";
+    } else {
+        #echo "<code>$pubkey</code>";
+    }
 
     require("../../config.php");
     $host = $config['db']['host'];
@@ -66,11 +88,14 @@ if(isset($_POST["submit"])) {
     $user = $config['db']['username'];
     $pass = $config['db']['password'];
     $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
-    $result = $db->exec("INSERT INTO pubkey(username, pubkey, email, enabled) VALUES('$username', '$pubkey', '$mail', TRUE) ON DUPLICATE KEY UPDATE pubkey='$pubkey'");
+    $result = $db->exec("INSERT INTO pubkey(username, pubkey, email, ipaddresses, enabled) VALUES('$username', '$pubkey', '$mail', '$ipaddresses', TRUE) ON DUPLICATE KEY UPDATE pubkey='$pubkey', ipaddresses='$ipaddresses'");
+    echo("INSERT INTO pubkey(username, pubkey, email, ipaddresses, enabled) VALUES('$username', '$pubkey', '$mail', '$ipaddresses', TRUE) ON DUPLICATE KEY UPDATE pubkey='$pubkey', ipaddresses='$ipaddresses'");
+    echo "</br>";
 
     echo "Your SSH credentials are:";
     echo "<li><b>username</b>:<code>$username</code></li>";
     echo "<li><b>pubkey</b>:<code>$pubkey</code></li>";
+    echo "<li><b>ip addresses</b>:<code>$ipaddresses</code></li>";
     echo "<p><a href='$return'>continue</a></p>";
 
 } else {
@@ -78,6 +103,10 @@ if(isset($_POST["submit"])) {
     <form method="post" enctype="multipart/form-data">
         Select SSH public key file to upload:
         <input type="file" name="fileToUpload" id="fileToUpload">
+	</br>
+	Comma-separted list of ip-addresses to authorize:
+        <input type="text" name="ipaddresses" id="ipaddresses">
+	</br>
         <input type="submit" value="Upload SSH pubkey" name="submit">
     </form>
 <?php

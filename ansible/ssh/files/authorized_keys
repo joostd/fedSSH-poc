@@ -12,11 +12,12 @@ then
 	exit
 fi
 
-KEY=`curl -sk https://192.168.100.10/api/authorized_keys.php?username=$username`
+KEY=$(curl -sk "https://192.168.100.10/api/authorized_keys.php?username=${username}&attribute=pubkey")
+IPS=$(curl -sk "https://192.168.100.10/api/authorized_keys.php?username=${username}&attribute=ipaddresses")
 
 if [ -z "$KEY" ]
 then
 	exit
 fi
 
-echo "no-port-forwarding,no-X11-forwarding,no-agent-forwarding $KEY"
+echo "from='$IPS',no-port-forwarding,no-X11-forwarding,no-agent-forwarding $KEY"

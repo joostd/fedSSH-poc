@@ -73,6 +73,8 @@ try {
         foreach( $data as $user ) {
             #if( $user['enabled'] == 1 ) {
             echo( substr($user['pubkey'], 0, 32) . "...  " );
+	    echo " ";
+            echo( substr($user['ipaddresses'], 0, 32) . "...  " );
             echo "(<a href='?delete'>delete</a>)";
             #}
         }

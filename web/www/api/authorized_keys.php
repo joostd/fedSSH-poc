@@ -19,6 +19,27 @@ if (!preg_match("/^[a-zA-Z0-9._-]+$/", $username)) {
     exit;
 }
 
+
+if ( isset( $_GET['attribute'] ) ) {
+	$attribute = $_GET['attribute'];
+} else {
+	$attribute="pubkey";
+}
+
+
+switch ($attribute) {
+	case "pubkey":
+		/* ok */
+		break;
+	case "ipaddresses":
+		/* ok */
+		break;
+    	default:
+		http_response_code(404);
+		break;
+}
+
+
 $host = $config['db']['host'];
 $dbname = $config['db']['dbname'];
 $user = $config['db']['username'];
@@ -29,9 +50,10 @@ header('Content-type: text/plain');
 
 try {
 	$data = getUserData($db, $username);
+
 	foreach( $data as $user ) {
 		if( $user['enabled'] == 1 ) {
-			echo( $user['pubkey'] );
+			echo( $user[$attribute] );
 		}
 	}
 } catch(PDOException $ex) {
