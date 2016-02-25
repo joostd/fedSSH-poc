@@ -5,7 +5,7 @@
 - name: copy hosts file
   copy: src=hosts dest=/etc/hosts owner=root mode=0644
 
-- name: set hostnmae
+- name: set hostname
   hostname: name=ldap.{{domain}}
 
 - name: install openldap and tools
