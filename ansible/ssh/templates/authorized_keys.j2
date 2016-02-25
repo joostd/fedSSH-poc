@@ -21,5 +21,5 @@ then
 	exit
 fi
 
-echo -e "no-port-forwarding,no-X11-forwarding,no-agent-forwarding "
+echo -n "no-port-forwarding,no-X11-forwarding,no-agent-forwarding "
 echo "$KEY" | perl -p00e 's/\r?\n //g' | cut -d' ' -f2 | base64 -d
