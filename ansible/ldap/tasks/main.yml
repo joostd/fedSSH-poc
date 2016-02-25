@@ -32,6 +32,10 @@
   notify:
   - restart slapd
 
+# Force restart the slapd service
+- name: Restart slapd
+  shell: "service slapd restart"
+
 - name: Copy sample data
   template: src=ubuntu.ldif.j2 dest=/tmp/ubuntu.ldif owner=root group=root
 
