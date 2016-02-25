@@ -36,7 +36,7 @@
   copy: src=nsswitch.conf dest=/etc/nsswitch.conf mode=0644
 
 - name: copy ldap client configuration file
-  template: src=ldap.conf.j2 dest=/etc/ldap.conf mode=0644 owner=root group-root
+  template: src=ldap.conf.j2 dest=/etc/ldap.conf mode=0644 owner=root group=root
 
 - name: enable pam mkhomedir session for sshd
   lineinfile: dest=/etc/pam.d/sshd insertafter="@include common-session"     line="session     optional      pam_mkhomedir.so"
